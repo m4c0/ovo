@@ -51,8 +51,13 @@ int main(int argc, char **argv) {
   m->add_unit<cmake>("ogg")->add_object("lib/libogg.a");
 
   auto v = m->add_unit<cmake>("vorbis");
+#ifdef _WIN32
+  v->add_object("lib/vorbis.lib");
+  v->add_object("lib/vorbisfile.lib");
+#else
   v->add_object("lib/libvorbis.a");
   v->add_object("lib/libvorbisfile.a");
+#endif
 
   auto mm = m->add_unit<mod>("ovo");
   mm->add_include_dir("ogg/include");
