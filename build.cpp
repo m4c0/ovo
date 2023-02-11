@@ -10,11 +10,13 @@ class cmake : public ecow::unit {
     const auto out = fs::path{ecow::impl::current_target()->build_folder()};
     const auto build = fs::absolute(out / name() / "build").string();
     const auto install = fs::absolute(out / "install").string();
+    const auto flags = ecow::impl::current_target()->cxxflags();
 
     auto setup = std::string{"cmake -S "} + name() + " -B " + build +
                  " -DCMAKE_BUILD_TYPE=Release " +
                  " -DCMAKE_FIND_ROOT_PATH=" + install +
-                 " -DCMAKE_INSTALL_PREFIX=" + install;
+                 " -DCMAKE_INSTALL_PREFIX=" + install + " -DCMAKE_C_FLAGS=\"" +
+                 flags + "\"";
     if (std::system(setup.c_str()) != 0)
       throw std::runtime_error("Failed to setup CMake");
 
