@@ -1,0 +1,3 @@
+[submodule "vorbis"]
+	path = vorbis
+	url = https://gitlab.xiph.org/xiph/vorbis.git
