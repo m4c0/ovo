@@ -1,3 +1,4 @@
+#include "../yoyo/build.hpp"
 #include "ecow.hpp"
 
 class cmake : public ecow::unit {
@@ -30,6 +31,7 @@ int main(int argc, char **argv) {
   using namespace ecow;
 
   auto m = unit::create<seq>("ovo");
+  m->add_wsdep("yoyo", yoyo());
   m->add_unit<cmake>("ogg");
   m->add_unit<cmake>("vorbis");
   m->add_unit<mod>("ovo");
