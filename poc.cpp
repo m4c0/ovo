@@ -1,0 +1,3 @@
+import ovo;
+
+int main() {}
