@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
   using namespace ecow;
 
   auto m = unit::create<seq>("ovo");
+  m->add_unit<cmake>("ogg");
   m->add_unit<cmake>("vorbis");
   m->add_unit<mod>("ovo");
 
