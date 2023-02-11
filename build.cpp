@@ -2,13 +2,16 @@
 
 class cmake : public ecow::unit {
   void build_self() const override {
-    const auto out = ecow::impl::current_target()->build_folder() + name();
-    const auto build = out + "/build";
-    const auto install = out + "/install";
+    namespace fs = std::filesystem;
 
-    auto setup =
-        std::string{"cmake -S "} + name() + " -B " + build +
-        " -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=" + install;
+    const auto out = fs::path{ecow::impl::current_target()->build_folder()};
+    const auto build = fs::absolute(out / name() / "build").string();
+    const auto install = fs::absolute(out / "install").string();
+
+    auto setup = std::string{"cmake -S "} + name() + " -B " + build +
+                 " -DCMAKE_BUILD_TYPE=Release " +
+                 " -DCMAKE_FIND_ROOT_PATH=" + install +
+                 " -DCMAKE_INSTALL_PREFIX=" + install;
     if (std::system(setup.c_str()) != 0)
       throw std::runtime_error("Failed to setup CMake");
 
