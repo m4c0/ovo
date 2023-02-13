@@ -58,6 +58,17 @@ public:
 
     return smp > 0;
   }
-  unsigned fill(float *data, unsigned size) { return 0; }
+  unsigned fill(float *data, unsigned size) {
+    unsigned av = (m_wp + buf_size - m_rp) % buf_size;
+    if (av == 0)
+      return 0;
+
+    unsigned res = av > size ? size : av;
+    for (auto i = 0; i < res; i++) {
+      data[i] = m_buffer[m_rp];
+      m_rp = (m_rp + 1) % buf_size;
+    }
+    return res;
+  }
 };
 } // namespace ovo
