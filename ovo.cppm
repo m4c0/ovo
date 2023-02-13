@@ -1,4 +1,5 @@
 module;
+#include "oggvorbis.h"
 #include "vorbis/vorbisfile.h"
 
 export module ovo;
