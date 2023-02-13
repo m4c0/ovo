@@ -8,7 +8,8 @@ int main() {
   while (d.preload()) {
   }
 
-  char buf[1024];
-  while (d.fill(buf, sizeof(buf)) > 0) {
+  constexpr const auto buf_size = 1024;
+  float buf[buf_size];
+  while (d.fill(buf, buf_size) > 0) {
   }
 }
