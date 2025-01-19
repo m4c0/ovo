@@ -29,9 +29,11 @@ int main() try {
     .take([](auto msg) { die("failure: ", msg); });
 
   ovo::file f = ovo::open_callbacks(data);
-  float *** pcm {};
+  float ** pcm {};
   int i {};
-  while (ovo::read_float(f, pcm, 1024, &i) > 0) {}
+  while (ovo::read_float(f, &pcm, 1024, &i) > 0) {
+    // Now use pcm[channel][sample]
+  }
 } catch (...) {
   return 1;
 }
