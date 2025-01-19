@@ -25,12 +25,18 @@ ovo::file ovo::open_callbacks(const char * data, unsigned sz) {
   return f;
 }
 
+size_t file_read(void * ptr, size_t size, size_t nmemb, void * f) { return fread(ptr, size, nmemb, (FILE *)f); }
+int file_seek(void * f, ogg_int64_t offset, int whence) { return fseek((FILE *)f, offset, whence); }
+int file_close(void * f) { return fclose((FILE *)f); }
+long file_tell(void * f) { return ftell((FILE *)f); }
 ovo::file ovo::open_file(jute::view name) {
-  constexpr const ov_callbacks cbs{
-  };
+  constexpr const ov_callbacks cbs { file_read, file_seek, file_close, file_tell };
 
-  file f { new OggVorbis_File {} };
-  if (0 != ov_open_callbacks(nullptr, *f, nullptr, 0, cbs)) {
+  auto file = fopen(name.cstr().begin(), "rb");
+  if (!file) silog::die("Could not open OggVorbis file");
+
+  ovo::file f { new OggVorbis_File {} };
+  if (0 != ov_open_callbacks(file, *f, nullptr, 0, cbs)) {
     silog::die("Could not start OggVorbis");
   }
   return f;
