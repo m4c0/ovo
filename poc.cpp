@@ -1,11 +1,11 @@
 #pragma leco tool
 
+import silog;
 import yoyo;
 import ovo;
 
-int main() {
-  yoyo::file_reader r{"silent.ogg"};
-  ovo::decoder d{&r};
+void run(yoyo::reader * r) {
+  ovo::decoder d{r};
 
   while (d.preload()) {
   }
@@ -14,4 +14,10 @@ int main() {
   float buf[buf_size];
   while (d.fill(buf, buf_size) > 0) {
   }
+}
+
+int main() {
+  yoyo::file_reader::open("silent.ogg")
+    .map([](auto & r) { run(&r); })
+    .take([](auto msg) { silog::die("failure"); });
 }
