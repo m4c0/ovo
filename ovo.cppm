@@ -20,7 +20,7 @@ namespace ovo {
 
   export file open_callbacks(const auto & data) {
     constexpr const ov_callbacks cbs{
-        .read_func = [](auto, auto, auto, auto) { return 0ULL; },
+        .read_func = [](auto, auto, auto, auto) -> size_t { return 0; },
     };
     file f { new OggVorbis_File {} };
     if (0 != ov_open_callbacks(nullptr, *f, data.begin(), data.size(), cbs)) {
