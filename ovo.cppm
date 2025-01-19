@@ -1,3 +1,6 @@
+#pragma leco add_include_dir "ogg/include"
+#pragma leco add_include_dir "vorbis/include"
+
 module;
 #include "oggvorbis.h"
 #include "vorbis/vorbisfile.h"

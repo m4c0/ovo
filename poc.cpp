@@ -1,4 +1,6 @@
-import yoyo_libc;
+#pragma leco tool
+
+import yoyo;
 import ovo;
 
 int main() {
