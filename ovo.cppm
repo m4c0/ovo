@@ -8,6 +8,8 @@ module;
 
 export module ovo;
 import hai;
+import jute;
+import silog;
 import yoyo;
 
 namespace ovo {
@@ -15,6 +17,22 @@ namespace ovo {
     void operator()(OggVorbis_File * f) { ov_clear(f); delete f; }
   };
   export using file = hai::value_holder<OggVorbis_File *, deleter>;
+
+  export file open_callbacks(const auto & data) {
+    constexpr const ov_callbacks cbs{
+        .read_func = [](auto, auto, auto, auto) { return 0ULL; },
+    };
+    file f { new OggVorbis_File {} };
+    if (0 != ov_open_callbacks(nullptr, *f, data.begin(), data.size(), cbs)) {
+      silog::die("Could not start OggVorbis");
+    }
+    return f;
+  }
+  export long read_float(file & f, float *** pcm, int samples, int * current) {
+    long res = ov_read_float(*f, pcm, samples, current);
+    if (res >= 0) return res;
+    silog::die("Could not read OggVorbis");
+  }
 
 export class decoder {
   static constexpr const auto buf_size = 102400;

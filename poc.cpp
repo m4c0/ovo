@@ -18,8 +18,20 @@ void run(yoyo::reader * r) {
   putln("all chunks 'played'");
 }
 
-int main() {
+int main() try {
   yoyo::file_reader::open("silent.ogg")
     .map([](auto & r) { run(&r); })
     .take([](auto msg) { die("failure: ", msg); });
+
+  // Second option, direct API access
+  auto data = yoyo::file_reader::open("silent.ogg")
+    .fmap(yoyo::slurp)
+    .take([](auto msg) { die("failure: ", msg); });
+
+  ovo::file f = ovo::open_callbacks(data);
+  float *** pcm {};
+  int i {};
+  while (ovo::read_float(f, pcm, 1024, &i) > 0) {}
+} catch (...) {
+  return 1;
 }
