@@ -1,3 +1,7 @@
+// Nothing we can do about warnings in Ogg/Vorbis code
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 #pragma leco add_include_dir "ogg/include"
 #pragma leco add_include_dir "vorbis/include"
 
