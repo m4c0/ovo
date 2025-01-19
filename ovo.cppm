@@ -33,6 +33,9 @@ namespace ovo {
     if (res >= 0) return res;
     silog::die("Could not read OggVorbis");
   }
+  export double time_total(file & f, int i) {
+    return ov_time_total(*f, i);
+  }
 
 export class decoder {
   static constexpr const auto buf_size = 102400;

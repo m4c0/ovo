@@ -29,6 +29,7 @@ int main() try {
     .take([](auto msg) { die("failure: ", msg); });
 
   ovo::file f = ovo::open_callbacks(data);
+  putfn("Time total: %f", ovo::time_total(f, -1));
   float ** pcm {};
   int i {};
   while (ovo::read_float(f, &pcm, 1024, &i) > 0) {
