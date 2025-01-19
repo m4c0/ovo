@@ -7,15 +7,21 @@ module;
 #include "vorbis/vorbisfile.h"
 
 export module ovo;
+import hai;
 import yoyo;
 
 namespace ovo {
+  struct deleter {
+    void operator()(OggVorbis_File * f) { ov_clear(f); delete f; }
+  };
+  export using file = hai::value_holder<OggVorbis_File *, deleter>;
+
 export class decoder {
   static constexpr const auto buf_size = 102400;
   static constexpr const auto max_samples_at_once = 1024;
 
   yoyo::reader *m_r;
-  OggVorbis_File m_vf{};
+  file m_vf {};
   bool m_started{};
   int m_section{};
   float m_buffer[buf_size];
@@ -33,15 +39,12 @@ export class decoder {
         .read_func = read_func,
         .seek_func = [](auto, auto, auto) { return -1; },
     };
-    return ov_open_callbacks(this, &m_vf, nullptr, 0, cbs) == 0;
+    m_vf = file { new OggVorbis_File {} };
+    return ov_open_callbacks(this, *m_vf, nullptr, 0, cbs) == 0;
   }
 
 public:
   constexpr explicit decoder(yoyo::reader *r) : m_r{r} {}
-  ~decoder() {
-    if (m_started)
-      ov_clear(&m_vf);
-  }
 
   bool preload() {
     if (!m_started && start())
@@ -54,7 +57,7 @@ public:
       return false;
 
     float **pcm{};
-    auto smp = ov_read_float(&m_vf, &pcm, max_samples_at_once, &m_section);
+    auto smp = ov_read_float(*m_vf, &pcm, max_samples_at_once, &m_section);
     for (auto i = 0; i < smp; i++) {
       // TODO: Do something if audio isn't stereo-16bits-44100
       m_buffer[m_wp] = pcm[0][i];
