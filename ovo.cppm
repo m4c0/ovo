@@ -19,6 +19,7 @@ namespace ovo {
     return open_callbacks(data.begin(), data.size());
   }
 
+  export long bitrate(file & f, int i);
   export long read_float(file & f, float *** pcm, int samples, int * i);
   export double time_total(file & f, int i);
 } // namespace ovo

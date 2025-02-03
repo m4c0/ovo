@@ -42,6 +42,8 @@ ovo::file ovo::open_file(jute::view name) {
   return f;
 }
 
+long ovo::bitrate(ovo::file & f, int i) { return ov_bitrate(*f, i); }
+
 long ovo::read_float(ovo::file & f, float *** pcm, int samples, int * current) {
   long res = ov_read_float(*f, pcm, samples, current);
   if (res >= 0) return res;
