@@ -49,6 +49,5 @@ long ovo::read_float(ovo::file & f, float *** pcm, int samples, int * current) {
   if (res >= 0) return res;
   silog::die("Could not read OggVorbis");
 }
-double ovo::time_total(ovo::file & f, int i) {
-  return ov_time_total(*f, i);
-}
+double ovo::time_tell(ovo::file & f) { return ov_time_tell(*f); }
+double ovo::time_total(ovo::file & f, int i) { return ov_time_total(*f, i); }

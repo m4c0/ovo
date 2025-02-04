@@ -21,5 +21,6 @@ namespace ovo {
 
   export long bitrate(file & f, int i);
   export long read_float(file & f, float *** pcm, int samples, int * i);
+  export double time_tell(file & f);
   export double time_total(file & f, int i);
 } // namespace ovo
