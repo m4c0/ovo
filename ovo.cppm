@@ -6,8 +6,6 @@ struct OggVorbis_File;
 export module ovo;
 import hai;
 import jute;
-import silog;
-import yoyo;
 
 namespace ovo {
   struct deleter { void operator()(OggVorbis_File * f); };
