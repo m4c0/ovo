@@ -19,9 +19,7 @@ ovo::file ovo::open_callbacks(const char * data, unsigned sz) {
     .read_func = [](auto, auto, auto, auto) -> size_t { return 0; },
   };
   file f { new OggVorbis_File {} };
-  if (0 != ov_open_callbacks(nullptr, *f, data, sz, cbs)) {
-    silog::die("Could not start OggVorbis");
-  }
+  if (0 != ov_open_callbacks(nullptr, *f, data, sz, cbs)) throw error {};
   return f;
 }
 
@@ -33,12 +31,10 @@ ovo::file ovo::open_file(jute::view name) {
   constexpr const ov_callbacks cbs { file_read, file_seek, file_close, file_tell };
 
   auto file = fopen(name.cstr().begin(), "rb");
-  if (!file) silog::die("Could not open OggVorbis file");
+  if (!file) throw error {};
 
   ovo::file f { new OggVorbis_File {} };
-  if (0 != ov_open_callbacks(file, *f, nullptr, 0, cbs)) {
-    silog::die("Could not start OggVorbis");
-  }
+  if (0 != ov_open_callbacks(file, *f, nullptr, 0, cbs)) throw error {};
   return f;
 }
 
@@ -47,7 +43,7 @@ long ovo::bitrate(ovo::file & f, int i) { return ov_bitrate(*f, i); }
 long ovo::read_float(ovo::file & f, float *** pcm, int samples, int * current) {
   long res = ov_read_float(*f, pcm, samples, current);
   if (res >= 0) return res;
-  silog::die("Could not read OggVorbis");
+  throw error {};
 }
 double ovo::time_tell(ovo::file & f) { return ov_time_tell(*f); }
 double ovo::time_total(ovo::file & f, int i) { return ov_time_total(*f, i); }

@@ -8,6 +8,8 @@ import hai;
 import jute;
 
 namespace ovo {
+  export struct error {};
+
   struct deleter { void operator()(OggVorbis_File * f); };
   export using file = hai::value_holder<OggVorbis_File *, deleter>;
 
